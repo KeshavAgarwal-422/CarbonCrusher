@@ -15,6 +15,8 @@ import Redemption from "./pages/Redemption";
 import { IoHome, IoNotificationsSharp, IoPersonSharp, IoPricetagsSharp, IoWalletSharp } from "react-icons/io5"
 import Notifications from "./pages/Notifications";
 import Wallet from "./pages/Wallet";
+import SensorComponent from "./Components/SensorComponent";
+import BasicDetails from "./pages/BasicDetails";
 
 
 function App() {
@@ -73,6 +75,8 @@ function App() {
         <Route path="/" element={<FitnessTrackerHome />} />
         <Route path="/introduction" element={<Introduction />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/basic-details" element={<BasicDetails />} />
+
         <Route path="/home" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/notifications" element={<Notifications />} />

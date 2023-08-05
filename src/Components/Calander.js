@@ -86,7 +86,7 @@ const DateSelector = () => {
     };
 
     return (
-        <div className="w-full  overflow-x-auto flex items-center pl-[12vw]">
+        <div className="w-full  overflow-x-auto  flex items-center pl-[12vw]">
             <div className=" absolute top-[6vw] right-[8vw] text-[3vh] ">
                 <svg
                     className="h-[7vw] text-[#E0FF63]"
@@ -105,7 +105,7 @@ const DateSelector = () => {
                         selected={new Date(selectedYear, selectedMonth, selectedDate)}
                         onChange={handleDateChange}
                         inline
-                        className='hidden  md:block '
+                        className='hidden md:block '
                         onClose={handleCalendarClose}
                         maxDate={presentDate} // Set the maximum selectable date to the present date
                     /></div>

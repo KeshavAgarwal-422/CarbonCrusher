@@ -3,11 +3,29 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @layer utilities {
   .font-outfit {
     font-family: 'Outfit', sans-serif;
   }
 }
+
 body {
-  @apply p-0 m-0
+  @apply p-0 m-0;
+  /* Hide the scrollbar */
+  scrollbar-width: none;
+  /* For Firefox */
+  -ms-overflow-style: none;
+  /* For Internet Explorer and Edge */
+}
+
+/* Hide the scrollbar for WebKit based browsers (Chrome, Safari, etc.) */
+body::-webkit-scrollbar {
+  display: none;
+}
+
+/* Optionally, you can set the scrollbar color if needed for Firefox */
+/* For Firefox */
+body::-moz-scrollbar {
+  display: none;
 }

@@ -25,10 +25,10 @@ const Login = () => {
     };
 
     return (
-        <div className="w-full h-full flex flex-col mt-[5vh] items-center justify-start decoration-none">
-            <div className="h-[5vh] w-[20vw] rounded-3xl bg-[#272727] flex justify-center items-center text-[4vw]">Walking</div>
+        <div className="w-full h-full flex flex-col mt-[10vw] items-center justify-start decoration-none">
+            <div className="h-[10vw] w-[20vw] rounded-3xl bg-[#272727] flex justify-center items-center text-[4vw]">Walking</div>
             {otpSent ? (
-                <div className="p-[20vw] mt-[15vh]">
+                <div className="p-[20vw] mt-[20vw]">
                     <h1 className="text-[7vw]">Enter OTP</h1>
                     <form className="flex flex-col ">
                         <input
@@ -36,21 +36,21 @@ const Login = () => {
                             placeholder="Enter OTP"
                             value={otp}
                             onChange={(e) => setOtp(e.target.value)}
-                            className="px-[3vw] py-[1vh] text-[4vw] my-[3vh] bg-[#272727] rounded-3xl text-[#CFFF0F]  focus:border-[#CFFF0F]"
+                            className="px-[3vw] py-[2vw] text-[4vw] my-[6vw] bg-[#272727] rounded-3xl text-[#CFFF0F]  focus:border-[#CFFF0F]"
                             required
                         />
 
                         <button
                             type="button"
                             onClick={handleVerifyOtp}
-                            className="bg-[#CFFF0F] px-[1vw] py-[1vh] text-[4vw] font-medium rounded-3xl text-black"
+                            className="bg-[#CFFF0F] px-[1vw] py-[2vw] text-[4vw] font-medium rounded-3xl text-black"
                         >
                             Verify OTP
                         </button>
                     </form>
                 </div>
             ) : (
-                <div className="p-[20vw] mt-[15vh]">
+                <div className="p-[20vw] mt-[20vw]">
                     <h1 className="text-[7vw]">Login</h1>
                     <form className="flex flex-col">
                         <input
@@ -58,14 +58,14 @@ const Login = () => {
                             placeholder="Mobile Number"
                             value={mobileNumber}
                             onChange={handleMobileNumberChange}
-                            className="px-[3vw] py-[1vh] text-[4vw] my-[3vh] bg-[#272727] rounded-3xl text-[#CFFF0F] focus:border-[#CFFF0F]"
+                            className="px-[3vw] py-[2vw] text-[4vw] my-[6vw] bg-[#272727] rounded-3xl text-[#CFFF0F] focus:border-[#CFFF0F]"
                             required
                         />
 
                         <button
                             type="button"
                             onClick={handleSendOtp}
-                            className="bg-[#CFFF0F] px-[1vw] py-[1vh] text-[4vw] font-medium rounded-3xl text-black"
+                            className="bg-[#CFFF0F] px-[1vw] py-[2vw] text-[4vw] font-medium rounded-3xl text-black"
                         >
                             Send OTP
                         </button>
