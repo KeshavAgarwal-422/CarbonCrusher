@@ -5,7 +5,6 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
-import FitnessTrackerHome from "./pages/FitnessTrackerHome";
 import { useEffect, useState } from "react";
 import Login from "./pages/Login";
 import Introduction from "./pages/Introduction";
@@ -72,11 +71,10 @@ function App() {
     <div className="h-screen w-screen bg-[#141414] text-[#E0FF63] font-outfit relative overflow-y-auto">
 
       <Routes>
-        <Route path="/" element={<FitnessTrackerHome />} />
-        <Route path="/introduction" element={<Introduction />} />
+
+        <Route path="/" element={<Introduction />} />
         <Route path="/login" element={<Login />} />
         <Route path="/basic-details" element={<BasicDetails />} />
-
         <Route path="/home" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/notifications" element={<Notifications />} />
