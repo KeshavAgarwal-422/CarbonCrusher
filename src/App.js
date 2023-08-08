@@ -16,6 +16,10 @@ import Notifications from "./pages/Notifications";
 import Wallet from "./pages/Wallet";
 import SensorComponent from "./Components/SensorComponent";
 import BasicDetails from "./pages/BasicDetails";
+import Test from "./pages/Test";
+import SensorComponent_1 from "./Components/SensorComponent_1";
+
+
 
 
 function App() {
@@ -73,6 +77,8 @@ function App() {
       <Routes>
 
         <Route path="/" element={<Introduction />} />
+        <Route path="/test" element={<SensorComponent_1 />} />
+
         <Route path="/login" element={<Login />} />
         <Route path="/basic-details" element={<BasicDetails />} />
         <Route path="/home" element={<Home />} />
@@ -80,6 +86,7 @@ function App() {
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/redeem" element={<Redemption />} />
         <Route path="/wallet" element={<Wallet />} />
+
 
       </Routes>
 

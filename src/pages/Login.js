@@ -30,6 +30,7 @@ const Login = () => {
             {otpSent ? (
                 <div className="p-[20vw] mt-[20vw]">
                     <h1 className="text-[7vw]">Enter OTP</h1>
+                    <></>
                     <form className="flex flex-col ">
                         <input
                             type="number"

@@ -1,53 +1,27 @@
-import { useEffect, useRef, useState } from 'react';
-
-const useEventListener = (eventName, handler, element = window) => {
-    const savedHandler = useRef();
-
-    useEffect(() => {
-        savedHandler.current = handler;
-    }, [handler]);
-
-    useEffect(() => {
-        const isSupported = element && element.addEventListener;
-        if (!isSupported) return;
-
-        const eventListener = (event) => savedHandler.current(event);
-
-        element.addEventListener(eventName, eventListener);
-
-        return () => {
-            element.removeEventListener(eventName, eventListener);
-        };
-    }, [eventName, element]);
-};
-
-
-
-
+import React, { useEffect, useState } from 'react';
 
 const SensorComponent = () => {
+    const windowSize = 50;  // Number of readings to keep for smoothing
+
     const [accelerometerData, setAccelerometerData] = useState({
-        x: null,
-        y: null,
-        z: null,
+        x: [],
+        y: [],
+        z: [],
     });
-
-    const [gyroscopeData, setGyroscopeData] = useState({
-        alpha: null,
-        beta: null,
-        gamma: null,
-    });
-
-    const [soundFrequencyData, setSoundFrequencyData] = useState([]);
 
     useEffect(() => {
         const handleDeviceMotion = (event) => {
             const { acceleration } = event;
-            setAccelerometerData({
-                x: acceleration.x,
-                y: acceleration.y,
-                z: acceleration.z,
+
+            setAccelerometerData((prevData) => {
+                const newData = {
+                    x: [...prevData.x.slice(-windowSize + 1), acceleration?.x || 0],
+                    y: [...prevData.y.slice(-windowSize + 1), acceleration?.y || 0],
+                    z: [...prevData.z.slice(-windowSize + 1), acceleration?.z || 0],
+                };
+                return newData;
             });
+
         };
 
         if (window.DeviceMotionEvent) {
@@ -56,73 +30,70 @@ const SensorComponent = () => {
             console.log("DeviceMotionEvent is not supported on this device.");
         }
 
-        const handleDeviceOrientation = (event) => {
-            const { alpha, beta, gamma } = event;
-            setGyroscopeData({
-                alpha,
-                beta,
-                gamma,
-            });
-        };
-
-        if (window.DeviceOrientationEvent) {
-            window.addEventListener('deviceorientation', handleDeviceOrientation, true);
-        } else {
-            console.log("DeviceOrientationEvent is not supported on this device.");
-        }
-
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const analyser = audioContext.createAnalyser();
-        analyser.fftSize = 256;
-        const bufferLength = analyser.frequencyBinCount;
-        const dataArray = new Uint8Array(bufferLength);
-
-        const handleUserMedia = async () => {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                const source = audioContext.createMediaStreamSource(stream);
-                source.connect(analyser);
-                analyser.connect(audioContext.destination);
-
-                const updateSoundData = () => {
-                    analyser.getByteFrequencyData(dataArray);
-                    setSoundFrequencyData([...dataArray]);
-                    requestAnimationFrame(updateSoundData);
-                };
-
-                updateSoundData();
-            } catch (error) {
-                console.error('Error accessing user media:', error);
-            }
-        };
-
-        handleUserMedia();
-
         return () => {
             window.removeEventListener('devicemotion', handleDeviceMotion, true);
-            window.removeEventListener('deviceorientation', handleDeviceOrientation, true);
+
         };
-    }, [accelerometerData, gyroscopeData]);
+    }, []);
+
+    const calculateStatistics = (data) => {
+        const sum = data.reduce((acc, val) => acc + val, 0);
+        const mean = sum / data.length;
+        const min = Math.min(...data);
+        const max = Math.max(...data);
+        const variance = data.reduce((variance, value) => variance + ((value - mean) ** 2), 0) / data.length;
+        const std = Math.sqrt(variance);
+
+        return {
+            mean: mean.toFixed(2),
+            min: min.toFixed(2),
+            max: max.toFixed(2),
+            std: std.toFixed(2),
+        };
+    };
+
+    const accelerometerStats = calculateStatistics([
+        ...accelerometerData.x,
+        ...accelerometerData.y,
+        ...accelerometerData.z,
+    ]);
 
 
+    const classifyTransportMode = (accelerometerStats) => {
+        if (accelerometerStats.max < 2) {
+            return 'Still';
+        }
+        else if (accelerometerStats.max >= 2 && accelerometerStats.max < 5) {
+            return 'Walking';
+        }
+        else if (accelerometerStats.max >= 5 && accelerometerStats.max < 10) {
+            return 'Running';
+        }
+        else if (accelerometerStats.max >= 10 && accelerometerStats.max < 15) {
+            return 'Biking';
+        }
+        else if (accelerometerStats.max >= 15) {
+            return 'In Vehicle';
+        }
+        else {
+            return 'Unknown';
+        }
+    };
+    const transportMode = classifyTransportMode(accelerometerStats);
 
     return (
         <div>
             <h2>Accelerometer Data:</h2>
-            <p>X: {accelerometerData.x}</p>
-            <p>Y: {accelerometerData.y}</p>
-            <p>Z: {accelerometerData.z}</p>
+            <p>Mean: {accelerometerStats.mean}</p>
+            <p>Min: {accelerometerStats.min}</p>
+            <p>Max: {accelerometerStats.max}</p>
+            <p>Std: {accelerometerStats.std}</p>
+            <h2>Transport Mode:</h2>
+            <p>{transportMode}</p>
 
-            <h2>Gyroscope Data:</h2>
-            <p>Alpha: {gyroscopeData.alpha}</p>
-            <p>Beta: {gyroscopeData.beta}</p>
-            <p>Gamma: {gyroscopeData.gamma}</p>
 
-            <h2>Sound Data:</h2>
-            <p>Frequency Data: {soundFrequencyData.join(', ')}</p>
         </div>
     );
 };
 
 export default SensorComponent;
-
